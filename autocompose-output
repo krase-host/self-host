@@ -1,0 +1,1075 @@
+networks:
+  compose_default:
+    external: true
+    name: "compose_default"
+  gaseous_gaseous:
+    external: true
+    name: "gaseous_gaseous"
+  mealie_default:
+    external: true
+    name: "mealie_default"
+  retrom_default:
+    external: true
+    name: "retrom_default"
+  romm_default:
+    external: true
+    name: "romm_default"
+
+services:
+
+  audiobookshelf:
+
+    cap_drop:
+      - "AUDIT_CONTROL"
+      - "BLOCK_SUSPEND"
+      - "DAC_READ_SEARCH"
+      - "IPC_LOCK"
+      - "IPC_OWNER"
+      - "LEASE"
+      - "LINUX_IMMUTABLE"
+      - "MAC_ADMIN"
+      - "MAC_OVERRIDE"
+      - "NET_ADMIN"
+      - "NET_BROADCAST"
+      - "SYSLOG"
+      - "SYS_ADMIN"
+      - "SYS_BOOT"
+      - "SYS_MODULE"
+      - "SYS_NICE"
+      - "SYS_PACCT"
+      - "SYS_PTRACE"
+      - "SYS_RAWIO"
+      - "SYS_RESOURCE"
+      - "SYS_TIME"
+      - "SYS_TTY_CONFIG"
+      - "WAKE_ALARM"
+
+    command:
+      - "node"
+      - "index.js"
+
+    container_name: "audiobookshelf"
+
+    entrypoint:
+      - "tini"
+      - "--"
+
+    environment:
+      - "TZ=America/Toronto"
+      - "UID=999"
+      - "GID=999"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "NODE_VERSION=20.18.0"
+      - "YARN_VERSION=1.22.22"
+      - "NODE_ENV=production"
+      - "NUSQLITE3_DIR=/usr/local/lib/nusqlite3"
+      - "NUSQLITE3_PATH=/usr/local/lib/nusqlite3/libnusqlite3.so"
+
+    hostname: "6be1f3b8a2e8"
+
+    image: "ghcr.io/advplyr/audiobookshelf:latest"
+
+    ipc: "private"
+
+    labels:
+      org.opencontainers.image.created: "2024-10-12T21:40:17.031Z"
+      org.opencontainers.image.description: "Self-hosted audiobook and podcast server"
+      org.opencontainers.image.licenses: "GPL-3.0"
+      org.opencontainers.image.revision: "80e0cac4747e61d1fbb5374ec4ac41d3499042e2"
+      org.opencontainers.image.source: "https://github.com/advplyr/audiobookshelf"
+      org.opencontainers.image.title: "audiobookshelf"
+      org.opencontainers.image.url: "https://github.com/advplyr/audiobookshelf"
+      org.opencontainers.image.version: "2.15.0"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    network_mode: "bridge"
+
+    ports:
+      - "13379:80/tcp"
+
+    volumes:
+      - "/home/jesse/Documents/Audiobookshelf/config:/config"
+      - "/home/jesse/Documents/Audiobookshelf/metadata:/metadata"
+      - "/media/sf_E_DRIVE/audiobooks:/audiobooks"
+      - "/media/sf_E_DRIVE/podcasts:/podcasts"
+
+  calibreweb:
+
+    container_name: "calibreweb"
+
+    entrypoint:
+      - "/init"
+
+    environment:
+      - "PUID=1000"
+      - "TZ=Australia/Sydney"
+      - "PGID=1000"
+      - "PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "HOME=/root"
+      - "LANGUAGE=en_US.UTF-8"
+      - "LANG=en_US.UTF-8"
+      - "TERM=xterm"
+      - "S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0"
+      - "S6_VERBOSITY=1"
+      - "S6_STAGE2_HOOK=/docker-mods"
+      - "VIRTUAL_ENV=/lsiopy"
+      - "LSIO_FIRST_PARTY=true"
+
+    hostname: "DockSTARTer"
+
+    image: "lscr.io/linuxserver/calibre-web:latest"
+
+    ipc: "private"
+
+    labels:
+      build_version: "Linuxserver.io version:- 0.6.23-ls295 Build-date:- 2024-10-20T02:04:58+00:00"
+      com.docker.compose.config-hash: "dbc54d631ec33a766a4d8be8551b35741859b484fe2d914f83d1e28e0760f0b7"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:33e26a7bd5c24b0d3e97f4f967f8ad93bf8400a9f42788d9875f0e6aa69125fb"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "compose"
+      com.docker.compose.project.config_files: "/home/jesse/.docker/compose/docker-compose.yml,/home/jesse/.docker/compose/docker-compose.override.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/.docker/compose"
+      com.docker.compose.replace: "bb63578bebdfc5eab9a88d23d66f881cc3aa23d559287ec097b255122021bcf0"
+      com.docker.compose.service: "calibreweb"
+      com.docker.compose.version: "2.29.7"
+      maintainer: "notdriz"
+      org.opencontainers.image.authors: "linuxserver.io"
+      org.opencontainers.image.created: "2024-10-20T02:04:58+00:00"
+      org.opencontainers.image.description: "[Calibre-web](https://github.com/janeczku/calibre-web) is\
+        \ a web app providing a clean interface for browsing, reading and downloading eBooks using an\
+        \ existing Calibre database.   It is also possible to integrate google drive and edit metadata\
+        \ and your calibre library through the app itself.    This software is a fork of library and licensed\
+        \ under the GPL v3 License.  "
+      org.opencontainers.image.documentation: "https://docs.linuxserver.io/images/docker-calibre-web"
+      org.opencontainers.image.licenses: "GPL-3.0-only"
+      org.opencontainers.image.ref.name: "1b92ce8361f35aa1517fb15cece3c6f0c1c34b23"
+      org.opencontainers.image.revision: "1b92ce8361f35aa1517fb15cece3c6f0c1c34b23"
+      org.opencontainers.image.source: "https://github.com/linuxserver/docker-calibre-web"
+      org.opencontainers.image.title: "Calibre-web"
+      org.opencontainers.image.url: "https://github.com/linuxserver/docker-calibre-web/packages"
+      org.opencontainers.image.vendor: "linuxserver.io"
+      org.opencontainers.image.version: "0.6.23-ls295"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "compose_default"
+
+    ports:
+      - "8083:8083/tcp"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/home/jesse/.config/appdata/calibreweb:/config"
+      - "/home/jesse/storage:/storage"
+
+    working_dir: "/"
+
+  gaseous-server:
+
+    container_name: "gaseous-server"
+
+    entrypoint:
+      - "dotnet"
+      - "gaseous-server.dll"
+
+    environment:
+      - "igdbclientid=j3fyrf1atfkhroirvb4pxa31hj0o8f"
+      - "igdbclientsecret=rkcbjpxiivg23mps8pp7u9bo44kax6"
+      - "TZ=Australia/Sydney"
+      - "dbhost=gsdb"
+      - "dbuser=root"
+      - "dbpass=gaseous"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "APP_UID=1654"
+      - "ASPNETCORE_HTTP_PORTS=8080"
+      - "DOTNET_RUNNING_IN_CONTAINER=true"
+      - "DOTNET_VERSION=8.0.7"
+      - "ASPNET_VERSION=8.0.7"
+      - "INDOCKER=1"
+
+    hostname: "56b49742a7d6"
+
+    image: "gaseousgames/gaseousserver:latest"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "7b50c6be4e39b420e9cd99043ce4cf86157be994f213ae1e1877d3938bf1d390"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: "gsdb:service_started:false"
+      com.docker.compose.image: "sha256:b17b24aefbd9edec70946af48fdde2ae1a056a2ef8a554b6ffe14b354d34ba83"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "gaseous"
+      com.docker.compose.project.config_files: "/home/jesse/Documents/gaseous/gaseous.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/Documents/gaseous"
+      com.docker.compose.replace: "acf4ccb6a32eb83354bb777bf18e84e959e718a76edeb4fe35b929b77c53b182"
+      com.docker.compose.service: "gaseous-server"
+      com.docker.compose.version: "2.29.7"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "gaseous_gaseous"
+
+    ports:
+      - "5198:80/tcp"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "gaseous_gs:/home/jesse/Documents/gaseous/gaseousserver"
+
+    working_dir: "/App"
+
+  gsdb:
+
+    command:
+      - "mariadbd"
+
+    container_name: "gsdb"
+
+    entrypoint:
+      - "docker-entrypoint.sh"
+
+    environment:
+      - "MARIADB_USER=gaseous"
+      - "MARIADB_PASSWORD=gaseous"
+      - "MARIADB_ROOT_PASSWORD=gaseous"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "GOSU_VERSION=1.17"
+      - "LANG=C.UTF-8"
+      - "MARIADB_VERSION=1:11.5.2+maria~ubu2404"
+
+    expose:
+      - "3306/tcp"
+
+    hostname: "60dc9e44a510"
+
+    image: "mariadb:latest"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "b40be8ae6f2dd119b53f6ff42d0c96fd4268af70a89959ea50992b97e3375074"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:980042c20069809672ada9598cbe466e9326a23ec71b45bcb61b43f1e801b709"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "gaseous"
+      com.docker.compose.project.config_files: "/home/jesse/Documents/gaseous/gaseous.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/Documents/gaseous"
+      com.docker.compose.service: "gsdb"
+      com.docker.compose.version: "2.29.7"
+      org.opencontainers.image.authors: "MariaDB Community"
+      org.opencontainers.image.base.name: "docker.io/library/ubuntu:noble"
+      org.opencontainers.image.description: "MariaDB Database for relational SQL"
+      org.opencontainers.image.documentation: "https://hub.docker.com/_/mariadb/"
+      org.opencontainers.image.licenses: "GPL-2.0"
+      org.opencontainers.image.ref.name: "ubuntu"
+      org.opencontainers.image.source: "https://github.com/MariaDB/mariadb-docker"
+      org.opencontainers.image.title: "MariaDB Database"
+      org.opencontainers.image.url: "https://github.com/MariaDB/mariadb-docker"
+      org.opencontainers.image.vendor: "MariaDB Community"
+      org.opencontainers.image.version: "11.5.2"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "gaseous_gaseous"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "gaseous_gsdb:/var/lib/mysql"
+
+  heimdall:
+
+    container_name: "heimdall"
+
+    entrypoint:
+      - "/init"
+
+    environment:
+      - "PGID=1000"
+      - "PUID=1000"
+      - "TZ=Australia/Sydney"
+      - "PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "PS1=$(whoami)@$(hostname):$(pwd)\\$ "
+      - "HOME=/root"
+      - "TERM=xterm"
+      - "S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0"
+      - "S6_VERBOSITY=1"
+      - "S6_STAGE2_HOOK=/docker-mods"
+      - "VIRTUAL_ENV=/lsiopy"
+      - "LSIO_FIRST_PARTY=true"
+
+    hostname: "DockSTARTer"
+
+    image: "lscr.io/linuxserver/heimdall:latest"
+
+    ipc: "private"
+
+    labels:
+      build_version: "Linuxserver.io version:- v2.6.1-ls286 Build-date:- 2024-10-25T18:38:00+00:00"
+      com.docker.compose.config-hash: "8ee880650d7393a77df60910209773dcbf96f1bfdaa38314e17af97c1cbfc9f9"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:95e1947e42d01f72bbf761b6ad97e424e0debc2e3eddfbce3a18b39ade32ea34"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "compose"
+      com.docker.compose.project.config_files: "/home/jesse/.docker/compose/docker-compose.yml,/home/jesse/.docker/compose/docker-compose.override.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/.docker/compose"
+      com.docker.compose.replace: "80cadca9b0a9609cf07942ad88cc03e20041dfcf35de1947123b5be6596b579c"
+      com.docker.compose.service: "heimdall"
+      com.docker.compose.version: "2.29.7"
+      maintainer: "aptalca"
+      org.opencontainers.image.authors: "linuxserver.io"
+      org.opencontainers.image.created: "2024-10-25T18:38:00+00:00"
+      org.opencontainers.image.description: "[Heimdall](https://heimdall.site) is a way to organise all\
+        \ those links to your most used web sites and web applications in a simple way.    Simplicity\
+        \ is the key to Heimdall.    Why not use it as your browser start page? It even has the ability\
+        \ to include a search bar using either Google, Bing or DuckDuckGo.  "
+      org.opencontainers.image.documentation: "https://docs.linuxserver.io/images/docker-heimdall"
+      org.opencontainers.image.licenses: "GPL-3.0-only"
+      org.opencontainers.image.ref.name: "2b6f0b792751cb2bbb8534ad6c3d433e93dc3866"
+      org.opencontainers.image.revision: "2b6f0b792751cb2bbb8534ad6c3d433e93dc3866"
+      org.opencontainers.image.source: "https://github.com/linuxserver/docker-heimdall"
+      org.opencontainers.image.title: "Heimdall"
+      org.opencontainers.image.url: "https://github.com/linuxserver/docker-heimdall/packages"
+      org.opencontainers.image.vendor: "linuxserver.io"
+      org.opencontainers.image.version: "v2.6.1-ls286"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "compose_default"
+
+    ports:
+      - "447:443/tcp"
+      - "8002:80/tcp"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/home/jesse/.config/appdata/heimdall:/config"
+      - "/home/jesse/storage:/storage"
+
+    working_dir: "/"
+
+  httpserver:
+
+    container_name: "httpserver"
+
+    entrypoint:
+      - "/http-server"
+
+    environment:
+      - "PGID=1000"
+      - "PUID=1000"
+      - "TZ=Australia/Sydney"
+      - "FILE_SERVER_COLOR_SET=indigo-red"
+      - "FILE_SERVER_TITLE=DockSTARTer"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+    hostname: "DockSTARTer"
+
+    image: "ghcr.io/patrickdappollonio/docker-http-server:latest"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "d124fb4c0e67e90329d8226e34521b8aedfcebbe1814f170c14c0cd926502805"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:1e04fbeb6d1dd695e402c3bfe21062766df4ba9fb7c8a0288e24fd8c643fb42b"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "compose"
+      com.docker.compose.project.config_files: "/home/jesse/.docker/compose/docker-compose.yml,/home/jesse/.docker/compose/docker-compose.override.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/.docker/compose"
+      com.docker.compose.service: "httpserver"
+      com.docker.compose.version: "2.29.7"
+      org.opencontainers.image.created: "2024-10-24T02:37:21Z"
+      org.opencontainers.image.description: "http-server version 2.5.2. See release notes at https://github.com/patrickdappollonio/http-server/releases/tag/v2.5.2"
+      org.opencontainers.image.revision: "2cd30c52dcdd36a1e68893a55f0eb90c3b9b0428"
+      org.opencontainers.image.source: "https://github.com/patrickdappollonio/http-server"
+      org.opencontainers.image.title: "http-server"
+      org.opencontainers.image.url: "https://github.com/patrickdappollonio/http-server"
+      org.opencontainers.image.version: "2.5.2"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "compose_default"
+
+    ports:
+      - "5000:5000/tcp"
+
+    restart: "unless-stopped"
+
+    user: "nobody"
+
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/home/jesse/storage:/storage"
+      - "/mnt/html:/html"
+
+    working_dir: "/html"
+
+  jellyseerr:
+    command:
+      - "pnpm"
+      - "start"
+    container_name: "jellyseerr"
+    entrypoint:
+      - "/sbin/tini"
+      - "--"
+    environment:
+      - "TZ=Asia/Tashkent"
+      - "PORT=5055"
+      - "LOG_LEVEL=debug"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "NODE_VERSION=20.18.0"
+      - "YARN_VERSION=1.22.22"
+    hostname: "9754952da9f7"
+    image: "fallenbagel/jellyseerr:latest"
+    ipc: "private"
+    labels:
+      com.docker.compose.config-hash: "d23beec0879f033f3e2711a50d4e4af383fa3a4eea14b8188921402f3fa1a1d3"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:177148b68134aa66fefcd78fd6ec0127dcc1a23a44ccb9b60e99f3001945fcd0"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "compose"
+      com.docker.compose.project.config_files: "/home/jesse/.docker/compose/docker-compose.override.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/.docker/compose"
+      com.docker.compose.service: "jellyseerr"
+      com.docker.compose.version: "2.29.7"
+      org.opencontainers.image.source: "https://github.com/Fallenbagel/jellyseerr"
+    logging:
+      driver: "json-file"
+      options: {}
+    networks:
+      - "compose_default"
+    ports:
+      - "5055:5055/tcp"
+    restart: "unless-stopped"
+    volumes:
+      - "/home/jesse/Documents/config/jellyseerr:/app/config"
+    working_dir: "/app"
+
+  mealie:
+
+    cap_drop:
+      - "AUDIT_CONTROL"
+      - "BLOCK_SUSPEND"
+      - "DAC_READ_SEARCH"
+      - "IPC_LOCK"
+      - "IPC_OWNER"
+      - "LEASE"
+      - "LINUX_IMMUTABLE"
+      - "MAC_ADMIN"
+      - "MAC_OVERRIDE"
+      - "NET_ADMIN"
+      - "NET_BROADCAST"
+      - "SYSLOG"
+      - "SYS_ADMIN"
+      - "SYS_BOOT"
+      - "SYS_MODULE"
+      - "SYS_NICE"
+      - "SYS_PACCT"
+      - "SYS_PTRACE"
+      - "SYS_RAWIO"
+      - "SYS_RESOURCE"
+      - "SYS_TIME"
+      - "SYS_TTY_CONFIG"
+      - "WAKE_ALARM"
+
+    container_name: "mealie"
+
+    entrypoint:
+      - "/app/run.sh"
+
+    environment:
+      - "BASE_URL=https://mealie.yourdomain.com"
+      - "ALLOW_SIGNUP=false"
+      - "PUID=1000"
+      - "PGID=1000"
+      - "TZ=America/Anchorage"
+      - "MAX_WORKERS=1"
+      - "WEB_CONCURRENCY=1"
+      - "PATH=/opt/poetry/bin:/opt/pysetup/.venv/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "LANG=C.UTF-8"
+      - "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D"
+      - "PYTHON_VERSION=3.10.14"
+      - "PYTHON_PIP_VERSION=23.0.1"
+      - "PYTHON_SETUPTOOLS_VERSION=65.5.1"
+      - "PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/66d8a0f637083e2c3ddffc0cb1e65ce126afb856/public/get-pip.py"
+      - "PYTHON_GET_PIP_SHA256=6fb7b781206356f45ad79efbb19322caa6c2a5ad39092d0d44d0fec94117e118"
+      - "MEALIE_HOME=/app"
+      - "PYTHONUNBUFFERED=1"
+      - "PYTHONDONTWRITEBYTECODE=1"
+      - "PIP_NO_CACHE_DIR=off"
+      - "PIP_DISABLE_PIP_VERSION_CHECK=on"
+      - "PIP_DEFAULT_TIMEOUT=100"
+      - "POETRY_HOME=/opt/poetry"
+      - "POETRY_VIRTUALENVS_IN_PROJECT=true"
+      - "POETRY_NO_INTERACTION=1"
+      - "PYSETUP_PATH=/opt/pysetup"
+      - "VENV_PATH=/opt/pysetup/.venv"
+      - "PRODUCTION=true"
+      - "TESTING=false"
+      - "GIT_COMMIT_HASH=0d06494bbfc62fc8a1771a85fd308190891d6167"
+      - "LD_LIBRARY_PATH=/usr/local/lib"
+      - "APP_PORT=9001"
+      - "STATIC_FILES=/spa/static"
+      - "HOST=0.0.0.0"
+      - "OPENAI_API_KEY=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"
+      - "OPENAI_MODEL=gpt-4o"
+      - "OPENAI_ENABLE_IMAGE_SERVICES=1"
+      - "OPENAI_WORKERS=2"
+      - "OPENAI_SEND_DATABASE_DATA=1"
+      - "OPENAI_REQUEST_TIMEOUT=60"
+      - "OPENAI_BASE_URL="
+
+    hostname: "3cd985dc7ebb"
+
+    image: "ghcr.io/mealie-recipes/mealie:v1.12.0"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "11c7138086a37978c9f41a2e43427d73b13d67ff47b15dea168925e47e8928c1"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:83b90539d35895fa6813ea21de8cc6e757f74719e5595c3c01c01a1dbe14c695"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "mealie"
+      com.docker.compose.project.config_files: "/data/compose/4/docker-compose.yml"
+      com.docker.compose.project.working_dir: "/data/compose/4"
+      com.docker.compose.replace: "d5808700692e68dcedf9e2f1e09bd44f8a87870687272dda28eca806a31a7820"
+      com.docker.compose.service: "mealie"
+      com.docker.compose.version: "2.29.2"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "mealie_default"
+
+    ports:
+      - "9925:9000/tcp"
+
+    restart: "always"
+
+    volumes:
+      - "mealie_mealie-data:/app/data"
+
+    working_dir: "/"
+
+  portainer:
+
+    container_name: "portainer"
+
+    entrypoint:
+      - "/portainer"
+
+    environment:
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+    hostname: "247fef5c7a0d"
+
+    image: "portainer/portainer-ce:2.21.2"
+
+    ipc: "private"
+
+    labels:
+      com.docker.desktop.extension.api.version: ">= 0.2.2"
+      com.docker.desktop.extension.icon: "https://portainer-io-assets.sfo2.cdn.digitaloceanspaces.com/logos/portainer.png"
+      com.docker.extension.additional-urls: "[{\"title\":\"Website\",\"url\":\"https://www.portainer.io?utm_campaign=DockerCon&utm_source=DockerDesktop\"\
+        },{\"title\":\"Documentation\",\"url\":\"https://docs.portainer.io\"},{\"title\":\"Support\",\"\
+        url\":\"https://join.slack.com/t/portainer/shared_invite/zt-txh3ljab-52QHTyjCqbe5RibC2lcjKA\"\
+        }]"
+      com.docker.extension.detailed-description: "<p data-renderer-start-pos=\"226\">Portainer&rsquo;s\
+        \ Docker Desktop extension gives you access to all of Portainer&rsquo;s rich management functionality\
+        \ within your docker desktop experience.</p><h2 data-renderer-start-pos=\"374\">With Portainer\
+        \ you can:</h2><ul><li>See all your running containers</li><li>Easily view all of your container\
+        \ logs</li><li>Console into containers</li><li>Easily deploy your code into containers using a\
+        \ simple form</li><li>Turn your YAML into custom templates for easy reuse</li></ul><h2 data-renderer-start-pos=\"\
+        660\">About Portainer&nbsp;</h2><p data-renderer-start-pos=\"680\">Portainer is the worlds&rsquo;\
+        \ most popular universal container management platform with more than 650,000 active monthly users.\
+        \ Portainer can be used to manage Docker Standalone, Kubernetes, Docker Swarm and Nomad environments\
+        \ through a single common interface. It includes a simple GitOps automation engine and a Kube\
+        \ API.&nbsp;</p><p data-renderer-start-pos=\"1006\">Portainer Business Edition is our fully supported\
+        \ commercial grade product for business-wide use. It includes all the functionality that businesses\
+        \ need to manage containers at scale. Visit <a class=\"sc-jKJlTe dPfAtb\" href=\"http://portainer.io/\"\
+        \ title=\"http://Portainer.io\" data-renderer-mark=\"true\">Portainer.io</a> to learn more about\
+        \ Portainer Business and <a class=\"sc-jKJlTe dPfAtb\" href=\"http://portainer.io/take-3?utm_campaign=DockerCon&amp;utm_source=Docker%20Desktop\"\
+        \ title=\"http://portainer.io/take-3?utm_campaign=DockerCon&amp;utm_source=Docker%20Desktop\"\
+        \ data-renderer-mark=\"true\">get 3 free nodes.</a></p>"
+      com.docker.extension.publisher-url: "https://www.portainer.io"
+      com.docker.extension.screenshots: "[{\"alt\": \"screenshot one\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-1.png\"\
+        },{\"alt\": \"screenshot two\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-2.png\"\
+        },{\"alt\": \"screenshot three\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-3.png\"\
+        },{\"alt\": \"screenshot four\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-4.png\"\
+        },{\"alt\": \"screenshot five\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-5.png\"\
+        },{\"alt\": \"screenshot six\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-6.png\"\
+        },{\"alt\": \"screenshot seven\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-7.png\"\
+        },{\"alt\": \"screenshot eight\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-8.png\"\
+        },{\"alt\": \"screenshot nine\", \"url\": \"https://portainer-io-assets.sfo2.digitaloceanspaces.com/screenshots/docker-extension-9.png\"\
+        }]"
+      io.portainer.server: "true"
+      org.opencontainers.image.description: "Docker container management made simple, with the world’s\
+        \ most popular GUI-based container management platform."
+      org.opencontainers.image.title: "Portainer"
+      org.opencontainers.image.vendor: "Portainer.io"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    mac_address: "02:42:ac:11:00:03"
+
+    network_mode: "bridge"
+
+    ports:
+      - "8000:8000/tcp"
+      - "9000:9000/tcp"
+      - "9443:9443/tcp"
+
+    restart: "always"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer_data:/data"
+
+    working_dir: "/"
+
+  quirky_wing:
+
+    cap_drop:
+      - "AUDIT_CONTROL"
+      - "BLOCK_SUSPEND"
+      - "DAC_READ_SEARCH"
+      - "IPC_LOCK"
+      - "IPC_OWNER"
+      - "LEASE"
+      - "LINUX_IMMUTABLE"
+      - "MAC_ADMIN"
+      - "MAC_OVERRIDE"
+      - "NET_ADMIN"
+      - "NET_BROADCAST"
+      - "SYSLOG"
+      - "SYS_ADMIN"
+      - "SYS_BOOT"
+      - "SYS_MODULE"
+      - "SYS_NICE"
+      - "SYS_PACCT"
+      - "SYS_PTRACE"
+      - "SYS_RAWIO"
+      - "SYS_RESOURCE"
+      - "SYS_TIME"
+      - "SYS_TTY_CONFIG"
+      - "WAKE_ALARM"
+
+    command:
+      - "./docker-entrypoint.sh"
+
+    container_name: "quirky_wing"
+
+    environment:
+      - "UID=999"
+      - "GID=999"
+      - "STATE_DIR=/home/jesse/Documents/metube"
+      - "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "LANG=C.UTF-8"
+      - "GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D"
+      - "PYTHON_VERSION=3.11.10"
+      - "UMASK=022"
+      - "DOWNLOAD_DIR=/downloads"
+      - "TEMP_DIR=/downloads"
+
+    hostname: "c4bb2168d718"
+
+    image: "ghcr.io/alexta69/metube:latest"
+
+    ipc: "private"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    network_mode: "bridge"
+
+    ports:
+      - "8081:8081/tcp"
+
+    volumes:
+      - "/media/sf_E_DRIVE/Youtube:/downloads"
+
+    working_dir: "/app"
+
+  readarr:
+
+    cap_drop:
+      - "AUDIT_CONTROL"
+      - "BLOCK_SUSPEND"
+      - "DAC_READ_SEARCH"
+      - "IPC_LOCK"
+      - "IPC_OWNER"
+      - "LEASE"
+      - "LINUX_IMMUTABLE"
+      - "MAC_ADMIN"
+      - "MAC_OVERRIDE"
+      - "NET_ADMIN"
+      - "NET_BROADCAST"
+      - "SYSLOG"
+      - "SYS_ADMIN"
+      - "SYS_BOOT"
+      - "SYS_MODULE"
+      - "SYS_NICE"
+      - "SYS_PACCT"
+      - "SYS_PTRACE"
+      - "SYS_RAWIO"
+      - "SYS_RESOURCE"
+      - "SYS_TIME"
+      - "SYS_TTY_CONFIG"
+      - "WAKE_ALARM"
+
+    container_name: "readarr"
+
+    entrypoint:
+      - "/init"
+
+    environment:
+      - "PUID=999"
+      - "PGID=999"
+      - "TZ=Europe/London"
+      - "PS1=$(whoami)@$(hostname):$(pwd)\\$"
+      - "PATH=/lsiopy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "HOME=/root"
+      - "TERM=xterm"
+      - "S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0"
+      - "S6_VERBOSITY=1"
+      - "S6_STAGE2_HOOK=/docker-mods"
+      - "VIRTUAL_ENV=/lsiopy"
+      - "LSIO_FIRST_PARTY=true"
+      - "XDG_CONFIG_HOME=/config/xdg"
+      - "COMPlus_EnableDiagnostics=0"
+      - "TMPDIR=/run/readarr-temp"
+
+    hostname: "060c27fc6340"
+
+    image: "lscr.io/linuxserver/readarr:develop"
+
+    ipc: "private"
+
+    labels:
+      build_version: "Linuxserver.io version:- 0.4.1.2648-ls128 Build-date:- 2024-10-20T05:06:54+00:00"
+      maintainer: "Roxedus,thespad"
+      org.opencontainers.image.authors: "linuxserver.io"
+      org.opencontainers.image.created: "2024-10-20T05:06:54+00:00"
+      org.opencontainers.image.description: "[Readarr](https://github.com/Readarr/Readarr) - Book Manager\
+        \ and Automation (Sonarr for Ebooks)  "
+      org.opencontainers.image.documentation: "https://docs.linuxserver.io/images/docker-readarr"
+      org.opencontainers.image.licenses: "GPL-3.0-only"
+      org.opencontainers.image.ref.name: "5acfcf34fb3f5ce972de19ec6d60628220ff178b"
+      org.opencontainers.image.revision: "5acfcf34fb3f5ce972de19ec6d60628220ff178b"
+      org.opencontainers.image.source: "https://github.com/linuxserver/docker-readarr"
+      org.opencontainers.image.title: "Readarr"
+      org.opencontainers.image.url: "https://github.com/linuxserver/docker-readarr/packages"
+      org.opencontainers.image.vendor: "linuxserver.io"
+      org.opencontainers.image.version: "0.4.1.2648-ls128"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    mac_address: "02:42:ac:11:00:02"
+
+    network_mode: "bridge"
+
+    ports:
+      - "8787:8787/tcp"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "/home/jesse/Documents/readarr/config:/config"
+      - "/media/sf_D_DRIVE/downloads:/downloads"
+      - "/media/sf_E_DRIVE/audiobooks:/books"
+
+    working_dir: "/"
+
+  retrom:
+
+    command:
+      - "/bin/sh"
+      - "-c"
+      - "./start.sh"
+
+    container_name: "retrom"
+
+    entrypoint:
+      - "docker-entrypoint.sh"
+
+    environment:
+      - "PATH=/pnpm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      - "NODE_VERSION=20.18.0"
+      - "YARN_VERSION=1.22.22"
+      - "PNPM_HOME=/pnpm"
+      - "UID=1505"
+      - "GID=1505"
+      - "UMASK=000"
+      - "USER=retrom"
+      - "RUST_LOG=info"
+      - "RETROM_CONFIG=/config/config.json"
+      - "NODE_ENV=production"
+
+    hostname: "17998a179b5f"
+
+    image: "ghcr.io/jmberesford/retrom-service:latest"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "de48d284cf58077ed1860cf611a86d04feb98f3be8a49bff936bbb2dcb527d7a"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:5a4f1ad5752baa0d93a516a0d85c65ff18ca7ee3c2165129392462846286caa8"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "retrom"
+      com.docker.compose.project.config_files: "/home/jesse/Documents/retrom/retromcomp.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/Documents/retrom"
+      com.docker.compose.service: "retrom"
+      com.docker.compose.version: "2.29.7"
+      org.opencontainers.image.created: "2024-10-17T18:06:18.515Z"
+      org.opencontainers.image.description: "A centralized game library/collection management service\
+        \ with a focus on emulation"
+      org.opencontainers.image.licenses: "GPL-3.0"
+      org.opencontainers.image.revision: "0650d22efe4b582db201b6607f3cf4271c244a5c"
+      org.opencontainers.image.source: "https://github.com/JMBeresford/retrom"
+      org.opencontainers.image.title: "retrom"
+      org.opencontainers.image.url: "https://github.com/JMBeresford/retrom"
+      org.opencontainers.image.version: "retrom-v0.2.7"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "retrom_default"
+
+    ports:
+      - "3001:3001/tcp"
+      - "5102:5102/tcp"
+
+    user: "retrom"
+
+    volumes:
+      - "/home/jesse/Documents/retrom/config:/config"
+      - "/mnt/edrive/emulation2/library/library1:/library1"
+      - "/mnt/edrive/emulation2/library/library2:/library2"
+
+    working_dir: "/app"
+
+  retrom-db:
+    command:
+      - "postgres"
+    container_name: "retrom-db"
+    entrypoint:
+      - "docker-entrypoint.sh"
+    environment:
+      - "POSTGRES_PASSWORD=super_secret_password"
+      - "POSTGRES_DB=retrom"
+      - "POSTGRES_USER=minecraft_steve"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/postgresql/16/bin"
+      - "GOSU_VERSION=1.17"
+      - "LANG=en_US.utf8"
+      - "PG_MAJOR=16"
+      - "PG_VERSION=16.4-1.pgdg120+2"
+      - "PGDATA=/var/lib/postgresql/data"
+    expose:
+      - "5432/tcp"
+    hostname: "retrom-db"
+    image: "postgres:16"
+    ipc: "private"
+    labels:
+      com.docker.compose.config-hash: "2808c7d127c55c3d05ce24e5fbbb28985404ded93724a86b15b9d2caec99075c"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:2490d47edbe06d389faa29630d5d61db10610969a2fcacea017415560855a00a"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "retrom"
+      com.docker.compose.project.config_files: "/home/jesse/Documents/retrom/retromcomp.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/Documents/retrom"
+      com.docker.compose.replace: "68bde785c125b1de82c71ea1a31458e9c9c1d079fb0bc9a8bc12bfba321f9878"
+      com.docker.compose.service: "retrom-db"
+      com.docker.compose.version: "2.29.7"
+    logging:
+      driver: "json-file"
+      options: {}
+    networks:
+      - "retrom_default"
+    restart: "unless-stopped"
+    volumes:
+      - "/home/jesse/Documents/retrom/retromdata:/var/lib/postgresql/data"
+
+  romm:
+
+    command:
+      - "/init"
+
+    container_name: "romm"
+
+    environment:
+      - "STEAMGRIDDB_API_KEY=3ea0ca83eabdc03c77b6efe996554bed"
+      - "IGDB_CLIENT_SECRET=rkcbjpxiivg23mps8pp7u9bo44kax6"
+      - "ROMM_AUTH_SECRET_KEY=639c995f16ae65db8ba92f25dcd14393cc6025abb008254d13026ecd265e6eaa"
+      - "DB_NAME=romm"
+      - "DB_PASSWD=password"
+      - "DB_USER=romm-serv"
+      - "MOBYGAMES_API_KEY="
+      - "IGDB_CLIENT_ID=j3fyrf1atfkhroirvb4pxa31hj0o8f"
+      - "DB_HOST=romm-db"
+      - "PATH=/src/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+    hostname: "8cb4d6b97c5d"
+
+    image: "rommapp/romm:latest"
+
+    ipc: "private"
+
+    labels:
+      com.docker.compose.config-hash: "bf332ea5cc3ab9196d7f46b6ee59e1b970e6ef474f816177ca1c7908b0404b90"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: "romm-db:service_started:false"
+      com.docker.compose.image: "sha256:c1f46b652d3213d9b3586d336d4993434df43672c629081e09938dcdabee2968"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "romm"
+      com.docker.compose.project.config_files: "/home/jesse/Documents/romm/docker-romm.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/Documents/romm"
+      com.docker.compose.service: "romm"
+      com.docker.compose.version: "2.29.7"
+      org.opencontainers.image.created: "2024-09-05T01:31:02.395Z"
+      org.opencontainers.image.description: "\"RomM (ROM Manager) allows you to scan, enrich, and browse\
+        \ your game collection with a clean and responsive interface. With support for multiple platforms,\
+        \ various naming schemes and custom tags, RomM is a must-have for anyone who plays on emulators.\""
+      org.opencontainers.image.licenses: "\"GPL-3.0\""
+      org.opencontainers.image.revision: "2de682ae85d71ccaeec9ece5fc62788541a8ea7e"
+      org.opencontainers.image.source: "https://github.com/rommapp/romm"
+      org.opencontainers.image.title: "\"rommapp/romm\""
+      org.opencontainers.image.url: "https://github.com/rommapp/romm"
+      org.opencontainers.image.version: "{{version}}"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "romm_default"
+
+    ports:
+      - "5091:8080/tcp"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "/home/jesse/Documents/romm/config:/romm/config"
+      - "/home/jesse/Documents/romm/redis:/redis-data"
+      - "/home/jesse/Documents/romm/resources:/romm/resources"
+      - "/mnt/edrive/Emulation/Assets:/romm/assets"
+      - "/mnt/edrive/Emulation/ROMs/Library1:/romm/library"
+
+    working_dir: "/romm"
+
+  watchtower:
+
+    container_name: "watchtower"
+
+    entrypoint:
+      - "/watchtower"
+
+    environment:
+      - "WATCHTOWER_INCLUDE_STOPPED=false"
+      - "WATCHTOWER_TIMEOUT=10s"
+      - "WATCHTOWER_SCHEDULE=0 0 4 * * *"
+      - "WATCHTOWER_NOTIFICATIONS_LEVEL=info"
+      - "WATCHTOWER_CLEANUP=true"
+      - "TZ=Australia/Sydney"
+      - "REPO_USER="
+      - "WATCHTOWER_NOTIFICATION_URL="
+      - "REPO_PASS="
+      - "WATCHTOWER_MONITOR_ONLY=false"
+      - "WATCHTOWER_NOTIFICATION_TEMPLATE={{range .}}{{.Message}}{{println}}{{end}}"
+      - "WATCHTOWER_NOTIFICATIONS=shoutrrr"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+    expose:
+      - "8080/tcp"
+
+    hostname: "DockSTARTer"
+
+    image: "ghcr.io/containrrr/watchtower:latest"
+
+    ipc: "private"
+
+    labels:
+      com.centurylinklabs.watchtower: "true"
+      com.docker.compose.config-hash: "c332ae2379be5b82392f8f9d02c029abd1ebde497b356787697651a4b919eb95"
+      com.docker.compose.container-number: "1"
+      com.docker.compose.depends_on: ""
+      com.docker.compose.image: "sha256:e7dd50d07b86c380dd53caeb7778da052d1a8fc2c606644a419afa35e9f5691e"
+      com.docker.compose.oneoff: "False"
+      com.docker.compose.project: "compose"
+      com.docker.compose.project.config_files: "/home/jesse/.docker/compose/docker-compose.yml"
+      com.docker.compose.project.working_dir: "/home/jesse/.docker/compose"
+      com.docker.compose.service: "watchtower"
+      com.docker.compose.version: "2.29.7"
+
+    logging:
+      driver: "json-file"
+      options: {}
+
+    networks:
+      - "compose_default"
+
+    restart: "unless-stopped"
+
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/home/jesse/storage:/storage"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+    working_dir: "/"
+
+version: "3.6"
+
+volumes:
+  gaseous_gs:
+    external: true
+  gaseous_gsdb:
+    external: true
+  mealie_mealie-data:
+    external: true
+  portainer_data:
+    external: true
