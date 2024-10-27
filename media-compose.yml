@@ -1,0 +1,82 @@
+---
+services:
+  # https://hub.docker.com/r/linuxserver/kavita Perhaps path metadata to same folders as audiobooks.
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest
+    container_name: kavita
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /path/to/kavita/config:/config
+      - /path/to/data:/data #optional
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    ports:
+      - 13378:80
+    volumes:
+      - </path/to/audiobooks>:/audiobooks
+      - </path/to/podcasts>:/podcasts
+      - </documents/docker/audiobookshelf/config>:/config
+      - </path/to/metadata>:/metadata
+    environment:
+      - TZ=Australia/Sydney
+
+  # https://hub.docker.com/r/linuxserver/jellyfin path all to library i guess
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - JELLYFIN_PublishedServerUrl=http://192.168.0.5 #optional
+    volumes:
+      - /path/to/jellyfin/library:/config
+      - /path/to/tvseries:/data/tvshows
+      - /path/to/movies:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
+
+  # https://hub.docker.com/r/linuxserver/calibre make sure to change ports. May have to set env variable for webui?
+  calibre:
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    security_opt:
+      - seccomp:unconfined #optional
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD= #optional
+      - CLI_ARGS= #optional
+    volumes:
+      - /path/to/calibre/config:/config
+    ports:
+      - 8080:8080
+      - 8181:8181
+      - 8081:8081
+    restart: unless-stopped
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
