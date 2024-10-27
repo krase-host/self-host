@@ -10,8 +10,8 @@ services:
       - TZ=Etc/UTC
     volumes:
       - /documents/docker/radarr/data:/config
-      - /netdrive/movies:/movies #optional
-      - /documents/docker/download-client-downloads:/downloads #optional
+      - /mnt/NAMEOFDRIVE/movies:/movies #optional
+      - /mnt/NAMEOFDRIVE/downloads:/downloads #optional
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -23,11 +23,11 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
+      - TZ=Australia/Sydney
     volumes:
       - /documents/docker/data:/config
-      - /netdrive/books:/books #optional
-      - /documents/docker/downloadclient-downloads:/downloads #optional
+      - /mnt/NAMEOFDRIVE/books:/books #optional
+      - /mnt/NAMEOFDRIVE/downloads:/downloads #optional
     ports:
       - 8787:8787
     restart: unless-stopped
@@ -42,8 +42,8 @@ services:
       - TZ=Etc/UTC
     volumes:
       - /documents/docker/sonarr/data:/config
-      - /netdrive/tvseries:/tv #optional
-      - /netdownloads/downloadclient-downloads:/downloads #optional
+      - /mnt/NAMEOFDRIVE/tvseries:/tv #optional
+      - /mnt/NAMEOFDRIVE/downloads:/downloads #optional
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -86,12 +86,25 @@ services:
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
-      - /path/to/qbittorrent/appdata:/config
-      - /path/to/downloads:/downloads #optional
+      - /documents/docker/qbittorrent/appdata:/config
+      - /mnt/NAMEOFDRIVE/downloads:/downloads #optional
     ports:
       - 8080:8080
       - 6881:6881
       - 6881:6881/udp
     restart: unless-stopped
-
+  
+  # https://docs.jellyseerr.dev/getting-started/docker?docker-methods=docker-compose
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=Australia/Sydney
+      - PORT=5055 #optional
+    ports:
+      - 5055:5055
+    volumes:
+      - /documents/docker/jellyseer/appdata/config:/app/config
+    restart: unless-stopped
     
