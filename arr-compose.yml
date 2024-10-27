@@ -1,1 +1,97 @@
+## change netdrive to mount external hdd, otherwise should be plug and play as long as the folders exist. Finder way to automate, probably will do it themselves.
+services:
+  # https://hub.docker.com/r/linuxserver/radarr
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /documents/docker/radarr/data:/config
+      - /netdrive/movies:/movies #optional
+      - /documents/docker/download-client-downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  
+  # https://hub.docker.com/r/linuxserver/readarr
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - /documents/docker/data:/config
+      - /netdrive/books:/books #optional
+      - /documents/docker/downloadclient-downloads:/downloads #optional
+    ports:
+      - 8787:8787
+    restart: unless-stopped
 
+  # https://hub.docker.com/r/linuxserver/sonarr
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /documents/docker/sonarr/data:/config
+      - /netdrive/tvseries:/tv #optional
+      - /netdownloads/downloadclient-downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  # https://docs.linuxserver.io/images/docker-jackett/#usage
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - AUTO_UPDATE=true #optional
+      - RUN_OPTS= #optional
+    volumes:
+      - /documents/docker/jackett/data:/config
+      - /documents/docker/blackhole:/downloads
+    ports:
+      - 9117:9117
+    restart: unless-stopped
+
+    # no idea how to use yet https://github.com/louislam/uptime-kuma
+  uptime-kuma:
+        image: louislam/uptime-kuma
+        container_name: uptime-kuma
+        volumes:
+            - ./uptime-kuma:/app/data
+        ports:
+            - 3001:3001    
+        restart: unless-stopped
+
+  # may not need, may set up on vps
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+      - TORRENTING_PORT=6881
+    volumes:
+      - /path/to/qbittorrent/appdata:/config
+      - /path/to/downloads:/downloads #optional
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+    
