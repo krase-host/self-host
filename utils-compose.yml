@@ -67,7 +67,7 @@ volumes:
       - /path/to/downloads:/downloads
       
   ##### https://hub.docker.com/r/linuxserver/heimdall
- heimdall:
+  heimdall:
     image: lscr.io/linuxserver/heimdall:latest
     container_name: heimdall
     environment:
@@ -86,9 +86,8 @@ portainer:
     image: portainer/portainer-ce:latest
     ports:
       - 9443:9443
-      volumes:
+    volumes:
         - data:/data
         - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-volumes:
-  data:
+data:
