@@ -1,0 +1,28 @@
+services:
+  retrom:
+    container_name: retrom
+    image: ghcr.io/jmberesford/retrom-service:latest
+    ports:
+      - 5102:5102
+      - 3001:3001 # to access the web client
+    volumes:
+      - /home/jesse/Documents/retrom/config:/config/ # directory containing your config file
+      - /mnt/edrive/emulation2/library/library1:/library1 # directory containing your first library
+      - /mnt/edrive/emulation2/library/library2:/library2 # directory containing your second library
+
+  # OPTIONAL: spin up a postgres container to use as the database, if you
+  # don't have one already.
+  #
+  # read the docs here: https://hub.docker.com/_/postgres
+  retrom-db:
+    container_name: retrom-db
+    hostname: retrom-db # this should match the db_url in your config file
+    image: postgres:16
+    restart: unless-stopped
+    volumes:
+      # to store the DB data on the host, change this path to any directory you like
+      - /home/jesse/Documents/retrom/retromdata/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: minecraft_steve # db user, used to connect to the db, should match the db_user in your config file
+      POSTGRES_PASSWORD: super_secret_password # db password for above user, should match the db_password in your config file
+      POSTGRES_DB: retrom # db name, should match the db_name in your config file
